@@ -22,8 +22,8 @@ jobs:
       - name: Prepare deploy folder
         run: |
           mkdir deploy
-          cp target/release/8915-product-service deploy/8915-product-service
-          chmod +x deploy/8915-product-service
+          cp target/release/product-service deploy/product-service
+          chmod +x deploy/product-service
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
