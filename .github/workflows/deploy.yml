@@ -1,0 +1,33 @@
+name: Build and deploy Rust app to Azure Web App - 8915-product-service
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Prepare deploy folder
+        run: |
+          mkdir deploy
+          cp target/release/8915-product-service deploy/8915-product-service
+          chmod +x deploy/8915-product-service
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: '8915midwebappProduct'
+          package: deploy
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
